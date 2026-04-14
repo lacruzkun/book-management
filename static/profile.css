@@ -1,0 +1,133 @@
+/* Reusing the "Book Nook" Theme */
+body {
+    font-family: "Georgia", serif;
+    background-color: #f4f1ea;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navigation */
+nav {
+    background-color: #382110;
+    color: white;
+    padding: 0.8rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav .logo { font-size: 1.5rem; font-weight: bold; }
+nav a { color: #dcd9d0; text-decoration: none; margin-left: 20px; font-size: 0.9rem; }
+
+/* Main Container */
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Profile Header */
+.profile-header {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #dcd9d0;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-pic {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #f4f1ea;
+    margin-bottom: 15px;
+}
+
+.profile-name { font-size: 2rem; color: #382110; margin: 0; }
+.profile-username { color: #764132; font-style: italic; margin-bottom: 15px; }
+.bio { max-width: 500px; margin: 0 auto; color: #555; line-height: 1.6; }
+
+/* Stats Dashboard */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #dcd9d0;
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #382110;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #764132;
+}
+
+/* Sections Grid */
+.profile-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+h3 { border-bottom: 1px solid #dcd9d0; padding-bottom: 10px; color: #382110; }
+
+/* Currently Reading */
+.currently-reading {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #dcd9d0;
+    display: flex;
+    gap: 20px;
+}
+
+.current-cover { width: 100px; height: 150px; background: #eee; border-radius: 4px; }
+
+.progress-bar {
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 65%; /* Placeholder progress */
+    height: 100%;
+    background: #764132;
+}
+
+/* Tag Cloud / Genres */
+.tag {
+    display: inline-block;
+    background: #e9e5d8;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    margin: 0 5px 10px 0;
+    color: #382110;
+}
+
+/* Mobile Friendly */
+@media (max-width: 768px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .profile-content { grid-template-columns: 1fr; }
+}

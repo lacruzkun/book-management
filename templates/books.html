@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Explore Books | The Book Nook{% endblock %}
+{% block content %}
+<h1> Planning To Read </h1>
+<div class="profile-content">
+    <div class="main-column">
+        {% for p in plan %}
+        <div class="currently-reading">
+            <img src={{ p.cover_path }}  alt="Book Cover" class="current-cover">
+            <div class="current-info">
+                <h4 style="margin:0 0 5px 0;">{{ p.title }}</h4>
+                <p style="margin:0; font-size: 0.9rem; color: #666;">by {{ p.author }}</p>
+                <p style="margin:15px 0 5px 0; font-size: 0.8rem;">Progress: N/A </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<h1> Currently Reading </h1>
+<div class="profile-content">
+    <div class="main-column">
+        {% for curr in current %}
+        <div class="currently-reading">
+            <img src={{ curr.cover_path }}  alt="Book Cover" class="current-cover">
+            <div class="current-info">
+                <h4 style="margin:0 0 5px 0;">{{ curr.title }}</h4>
+                <p style="margin:0; font-size: 0.9rem; color: #666;">by {{ curr.author }}</p>
+                <p style="margin:15px 0 5px 0; font-size: 0.8rem;">Progress: 65% (310 / 476 pages)</p>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<h1> Completed Reading</h1>
+<div class="profile-content">
+    <div class="main-column">
+        {% for r in read %}
+        <div class="currently-reading">
+            <img src={{ r.cover_path }}  alt="Book Cover" class="current-cover">
+            <div class="current-info">
+                <h4 style="margin:0 0 5px 0;">{{ r.title }}</h4>
+                <p style="margin:0; font-size: 0.9rem; color: #666;">by {{ r.author }}</p>
+                <p style="margin:15px 0 5px 0; font-size: 0.8rem;">Progress: Completed </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

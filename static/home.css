@@ -1,0 +1,382 @@
+
+/* Base Styles */
+body {
+    font-family: "Georgia", serif;
+    background-color: #f4f1ea;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #382110;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+/* Update the nav to handle three items (Logo, Search, Links) */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+}
+
+/* Search Bar Styling */
+.search-container {
+    flex-grow: 0.5; /* Makes the search bar take up a good chunk of the middle */
+    margin: 0 20px;
+}
+
+.search-container form {
+    display: flex;
+    background: #fff;
+    border-radius: 20px; /* Rounded pill shape */
+    padding: 2px 10px;
+    border: 1px solid #dcd9d0;
+}
+
+.search-container input {
+    border: none;
+    padding: 8px 10px;
+    width: 100%;
+    outline: none; /* Removes the blue highlight when clicking */
+    font-family: "Georgia", serif;
+    font-size: 0.9rem;
+    background: transparent;
+}
+
+.search-container button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0 5px;
+}
+
+/* Quick fix for mobile */
+@media (max-width: 600px) {
+    nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .search-container {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+nav .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+nav .nav-links a {
+    color: #dcd9d0;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 0.9rem;
+}
+
+/* Main Container */
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h2 {
+    color: #382110;
+    border-bottom: 2px solid #dcd9d0;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+/* Book Grid Layout */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+}
+
+/* Book Card Styling */
+.book-card {
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+    border: 1px solid #dcd9d0;
+    display: flex;
+    flex-direction: column;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.book-cover {
+    background-color: #e0e0e0;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-style: italic;
+    border-bottom: 1px solid #eee;
+}
+
+/* Using placeholder images for covers */
+.book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.book-info {
+    padding: 15px;
+    flex-grow: 1;
+}
+
+.book-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+    color: #382110;
+}
+
+.book-author {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.rating {
+    color: #b38b00; /* Gold color for stars */
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+}
+
+/* Buttons */
+.btn-add {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #764132;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.85rem;
+    border: none;
+    border-top: 1px solid #eee;
+    cursor: pointer;
+}
+
+.btn-add:hover {
+    background-color: #5a3a22;
+}
+
+/* Search Result Card (List Style) */
+.result-item {
+    background: #fff;
+    border: 1px solid #dcd9d0;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.result-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.result-cover {
+    width: 120px;
+    height: 180px;
+    background-color: #eee;
+    flex-shrink: 0;
+}
+
+.result-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.result-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.result-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #382110;
+    margin: 0 0 5px 0;
+    text-decoration: none;
+}
+
+.result-author {
+    font-size: 1rem;
+    color: #764132;
+    margin-bottom: 10px;
+}
+
+.result-stats {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.rating-stars {
+    color: #b38b00;
+    font-weight: bold;
+}
+
+.add-btn {
+    align-self: flex-start;
+    padding: 8px 16px;
+    background-color: #382110;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: "Georgia", serif;
+}
+
+.add-btn:hover {
+    background-color: #5a3a22;
+}
+
+/* Main Container */
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Profile Header */
+.profile-header {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #dcd9d0;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-pic {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #f4f1ea;
+    margin-bottom: 15px;
+}
+
+.profile-name { font-size: 2rem; color: #382110; margin: 0; }
+.profile-username { color: #764132; font-style: italic; margin-bottom: 15px; }
+.bio { max-width: 500px; margin: 0 auto; color: #555; line-height: 1.6; }
+
+/* Stats Dashboard */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #dcd9d0;
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #382110;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #764132;
+}
+
+/* Sections Grid */
+.profile-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+h3 { border-bottom: 1px solid #dcd9d0; padding-bottom: 10px; color: #382110; }
+
+/* Currently Reading */
+.currently-reading {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #dcd9d0;
+    display: flex;
+    gap: 20px;
+}
+
+.current-cover { width: 100px; height: 150px; background: #eee; border-radius: 4px; }
+
+.progress-bar {
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 65%; /* Placeholder progress */
+    height: 100%;
+    background: #764132;
+}
+
+/* Tag Cloud / Genres */
+.tag {
+    display: inline-block;
+    background: #e9e5d8;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    margin: 0 5px 10px 0;
+    color: #382110;
+}

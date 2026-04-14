@@ -1,0 +1,77 @@
+body {
+    font-family: "Georgia", serif; /* Serif fonts give a classic book feel */
+    background-color: #f4f1ea;    /* A soft, paper-like cream color */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 350px;
+    text-align: center;
+    border: 1px solid #dcd9d0;
+}
+
+h1 {
+    color: #382110; /* Deep brown */
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensures padding doesn't break width */
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #382110;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #5a3a22;
+}
+
+.footer-links {
+    margin-top: 20px;
+    font-size: 0.85rem;
+}
+
+.footer-links a {
+    color: #764132;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Explore Books | The Book Nook{% endblock %}
+{% block content %}
+<h1>Welcome {{ user }}</h1>
+<div class="container">
+    <h2>Explore Trending Books</h2>
+
+    <div class="book-grid">
+        
+        {% for book in books %}
+        <article class="book-card">
+            <div class="book-cover">
+                <img src={{ book.cover_path }} alt="Book Cover">
+            </div>
+            <div class="book-info">
+                <p class="book-title">{{ book.title }}</p>
+                <p class="book-author">{{ book.author }}</p>
+                <div class="rating">★★★★☆ 4.2</div>
+            </div>
+            <form id="addForm" action={{ url_for('add_to_plan_button') }} method="POST">
+                <input type="hidden" name="book_id" value={{ result.id }}>
+                <button type="submit" class="add-btn" >Want to Read</button>
+            </form>
+            <script>
+            document.addEventListener("DOMContentLoaded", () {
+                const form = document.getElementById("addForm");
+                form.addEvenListener("submit", async function (e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(this);
+
+                    const response = await fetch(this.action, {
+                        method: "POST",
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        alert("Added");
+                    }
+                }
+
+            });
+            </script>
+        </article>
+        {% endfor %}
+
+
+    </div>
+</div>
+{% endblock %}

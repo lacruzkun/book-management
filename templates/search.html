@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Search Results | The Book Nook{% endblock %}
+{% block content %}
+<div class="container">
+    <p class="search-meta">Showing {{ no_of_results }} results for <strong>{{ query }}</strong></p>
+
+    {% for result in results %}
+    <div class="result-item">
+        <div class="result-cover">
+            <img src={{ result.cover_path }} alt="Book Cover">
+        </div>
+        <div class="result-info">
+            <div>
+                <a href="#" class="result-title">{{ result.title }}</a>
+                <div class="result-author">{{ result.author }}</div>
+                <div class="result-stats">
+                    <span class="rating-stars">★★★★★ 4.5</span> • {{ result.pages }} • Sci-Fi
+                </div>
+                <p style="font-size: 0.9rem; color: #555; margin-top: 5px;">A lone astronaut must save the earth from disaster...</p>
+            </div>
+            <form id="addForm" action={{ url_for('add_to_plan_button') }} method="POST">
+                <input type="hidden" name="book_id" value={{ result.id }}>
+                <button type="submit" class="add-btn" >Add to Library</button>
+            </form>
+            <script>
+            document.addEventListener("DOMContentLoaded", () {
+                const form = document.getElementById("addForm");
+                form.addEvenListener("submit", async function (e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(this);
+
+                    const response = await fetch(this.action, {
+                        method: "POST",
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        alert("Added");
+                    }
+                }
+
+            });
+            </script>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

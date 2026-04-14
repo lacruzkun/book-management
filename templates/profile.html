@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}My Profile | The Book Nook{% endblock %}
+{% block content %}
+
+<div class="container">
+    
+    <header class="profile-header">
+        <img src="{{ profile.pic_path }}" alt="Profile Picture" class="profile-pic">
+        <h1 class="profile-name">{{ profile.name }}</h1>
+        <p class="profile-username">{{"@" + profile.username }}</p>
+        <p class="bio">{{ profile.bio if profile.bio else "click to add a bio" }}</p>
+    </header>
+
+    <section class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-number">{{ no_of_read}}</span>
+            <span class="stat-label">Read</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ no_of_currently_reading }}</span>
+            <span class="stat-label">Currently Reading</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ no_of_plan }}</span>
+            <span class="stat-label">Plan to Read</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">4.2</span>
+            <span class="stat-label">Avg Rating</span>
+        </div>
+    </section>
+
+    <div class="profile-content">
+        
+        <div class="main-column">
+            <h3>Currently Reading</h3>
+            {% for curr in current %}
+            <div class="currently-reading">
+                <img src={{ curr.cover_path }}  alt="Book Cover" class="current-cover">
+                <div class="current-info">
+                    <h4 style="margin:0 0 5px 0;">{{ curr.title }}</h4>
+                    <p style="margin:0; font-size: 0.9rem; color: #666;">by {{ curr.author }}</p>
+                    <p style="margin:15px 0 5px 0; font-size: 0.8rem;">Progress: 65% (310 / 476 pages)</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <h3>Recent Activity</h3>
+            <p style="font-size: 0.9rem; color: #555;">📖 Marked <strong>The Great Gatsby</strong> as 'Read' - 2 days ago</p>
+            <p style="font-size: 0.9rem; color: #555;">⭐ Rated <strong>Circe</strong> 5 stars - 1 week ago</p>
+        </div>
+
+        <div class="side-column">
+            <h3>Favorite Genres</h3>
+            <div class="genre-tags">
+                <span class="tag">Sci-Fi</span>
+                <span class="tag">Fantasy</span>
+                <span class="tag">History</span>
+                <span class="tag">Mystery</span>
+                <span class="tag">Classics</span>
+            </div>
+
+            <h3>2026 Challenge</h3>
+            <div class="stat-card">
+                <span class="stat-number">12/50</span>
+                <p style="font-size: 0.8rem; margin: 10px 0 0 0;">Books read in 2026</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
