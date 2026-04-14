@@ -47,7 +47,6 @@ def home():
         return redirect(url_for("login"))
 
     if request.method == "POST":
-        print("did we get here")
         book_id = request.form.get("book_id")
         conn = get_db_connection()
         conn.execute("INSERT INTO user_books(user_id, book_id, progress, status) values(?, ?, ?, ?)", (session["user"][0], book_id, "N/A", "plan"))
@@ -84,7 +83,6 @@ def signup():
         repassword = request.form.get("repassword")
 
         if password != repassword:
-            print("two passwords must match")
             return redirect(url_for("signup"))
 
         conn = get_db_connection()
@@ -113,13 +111,13 @@ def my_books():
     p_b = []
     for b in curr_books:
         c_b.append(conn.execute("SELECT * FROM books WHERE id = ?", (b["book_id"], )).fetchone())
-
     read_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "read")).fetchall()
     for b in read_books:
         r_b.append(conn.execute("SELECT * FROM books WHERE id = ?", (b["book_id"], )).fetchone())
     plan_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "plan")).fetchall()
     for b in plan_books:
         p_b.append(conn.execute("SELECT * FROM books WHERE id = ?", (b["book_id"], )).fetchone())
+    conn.close()
     return render_template("books.html", current=c_b, plan=p_b, read=r_b)
 
 @app.route("/profile")
@@ -135,6 +133,7 @@ def profile():
 
     read_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "read")).fetchall()
     plan_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "plan")).fetchall()
+    conn.close()
     return render_template("profile.html", profile=profile, no_of_currently_reading=len(c_b), no_of_read=len(read_books), no_of_plan=len(plan_books), current=c_b)
 
 @app.route("/search")
@@ -149,8 +148,6 @@ def search():
     else:
         results = []
     conn.close()
-    print(query)
-    print(results)
 
     return render_template("search.html", no_of_results=len(results), results=results, query=query)
 
