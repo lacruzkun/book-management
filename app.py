@@ -62,6 +62,9 @@ def login():
         conn = get_db_connection()
         usr = conn.execute("SELECT id, username, name, bio, pic_path  FROM users WHERE username = ? AND password = ?", (username, password)).fetchone()
         conn.close()
+        if usr == None:
+            return render_template("login.html")
+            
         session["user"] = [usr['id'], usr['username'], usr['name'], usr['bio'], usr['pic_path']]
         return redirect(url_for("home"))
     return render_template("login.html")
@@ -79,7 +82,7 @@ def signup():
 
         conn = get_db_connection()
         usr = conn.execute("SELECT username, name, bio, pic_path  FROM users WHERE username = ? AND password = ?", (username, password)).fetchone()
-        conn.execute("INSERT INTO users(id, username, password, name, bio, pic_path) values(?, ?, ?)", (hash(username+password), username, password, "", "", ""))
+        conn.execute("INSERT INTO users(id, username, password, name, bio, pic_path) values(?, ?, ?, ?, ?, ?)", (hash(username+password), username, password, "", "", ""))
         conn.commit()
         conn.close()
         session["user"] = [hash(username+password), username, "",  "", ""]
@@ -93,19 +96,34 @@ def logout():
 
 @app.route("/my_books")
 def my_books():
-    return render_template("books.html")
+    conn = get_db_connection()
+    profile = conn.execute("SELECT username, name, pic_path, bio FROM users WHERE id = ?", (session["user"][0],)).fetchone()
+    curr_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "reading")).fetchall()
+    c_b = []
+    r_b = []
+    p_b = []
+    for b in curr_books:
+        c_b.append(conn.execute("SELECT * FROM books WHERE id = ?", (b["book_id"], )).fetchone())
+
+    read_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "read")).fetchall()
+    for b in read_books:
+        r_b.append(conn.execute("SELECT * FROM books WHERE id = ?", (b["book_id"], )).fetchone())
+    plan_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "plan")).fetchall()
+    for b in plan_books:
+        p_b.append(conn.execute("SELECT * FROM books WHERE id = ?", (b["book_id"], )).fetchone())
+    return render_template("books.html", current=c_b, plan=p_b, read=r_b)
 
 @app.route("/profile")
 def profile():
     conn = get_db_connection()
-    profile = conn.execute("SELECT username, name, pic_path bio FROM users WHERE id = ?", (session["user"][0],)).fetchone()
+    profile = conn.execute("SELECT username, name, pic_path, bio FROM users WHERE id = ?", (session["user"][0],)).fetchone()
     curr_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "reading")).fetchall()
     c_b = []
     for b in curr_books:
         c_b.append(conn.execute("SELECT * FROM books WHERE id = ?", (b["book_id"], )).fetchone())
 
     read_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "read")).fetchall()
-    plan_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "plan")).fetchone()
+    plan_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "plan")).fetchall()
     return render_template("profile.html", profile=profile, no_of_currently_reading=len(c_b), no_of_read=len(read_books), no_of_plan=len(plan_books), current=c_b)
 
 @app.route("/search")
@@ -122,6 +140,18 @@ def search():
     print(results)
 
     return render_template("search.html", no_of_results=len(results), results=results, query=query)
+@app.route("/add_to_plan_button", methods=["POST"])
+def add_to_plan_button():
+    if request.method == "POST":
+        book_id = request.form.get("book_id")
+        conn = get_db_connection()
+        conn.execute("INSERT INTO user_books(user_id, book_id, progress, status) values(?, ?, ?, ?)", (session["user"][0], book_id, "N/A", "plan"))
+        conn.commit()
+        conn.close()
+        return "ok"
+    return "no"
+
+
 
 
 # https://covers.openlibrary.org/b/isbn/9780385533225-S.jpg
