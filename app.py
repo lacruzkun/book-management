@@ -41,15 +41,22 @@ def get_db_connection():
     return conn
 
 
-@app.route("/")
+@app.route("/", methods=["POST", "GET"])
 def home():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+        print("did we get here")
+        book_id = request.form.get("book_id")
+        conn = get_db_connection()
+        conn.execute("INSERT INTO user_books(user_id, book_id, progress, status) values(?, ?, ?, ?)", (session["user"][0], book_id, "N/A", "plan"))
+        conn.commit()
+        conn.close()
+
     conn = get_db_connection()
     books = conn.execute("SELECT * FROM books").fetchall()
     conn.close()
-    try:
-        user = session["user"][1]
-    except Exception as e:
-        return redirect(url_for("login"))
 
     return render_template("home.html", user=session["user"][1], books=books)
 
@@ -96,6 +103,8 @@ def logout():
 
 @app.route("/my_books")
 def my_books():
+    if "user" not in session:
+        return redirect(url_for("login"))
     conn = get_db_connection()
     profile = conn.execute("SELECT username, name, pic_path, bio FROM users WHERE id = ?", (session["user"][0],)).fetchone()
     curr_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "reading")).fetchall()
@@ -115,6 +124,8 @@ def my_books():
 
 @app.route("/profile")
 def profile():
+    if "user" not in session:
+        return redirect(url_for("login"))
     conn = get_db_connection()
     profile = conn.execute("SELECT username, name, pic_path, bio FROM users WHERE id = ?", (session["user"][0],)).fetchone()
     curr_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "reading")).fetchall()
@@ -128,6 +139,8 @@ def profile():
 
 @app.route("/search")
 def search():
+    if "user" not in session:
+        return redirect(url_for("login"))
     query = request.args.get("q", "").strip()
     conn = get_db_connection()
 
@@ -140,16 +153,7 @@ def search():
     print(results)
 
     return render_template("search.html", no_of_results=len(results), results=results, query=query)
-@app.route("/add_to_plan_button", methods=["POST"])
-def add_to_plan_button():
-    if request.method == "POST":
-        book_id = request.form.get("book_id")
-        conn = get_db_connection()
-        conn.execute("INSERT INTO user_books(user_id, book_id, progress, status) values(?, ?, ?, ?)", (session["user"][0], book_id, "N/A", "plan"))
-        conn.commit()
-        conn.close()
-        return "ok"
-    return "no"
+
 
 
 
@@ -157,6 +161,6 @@ def add_to_plan_button():
 # https://covers.openlibrary.org/b/isbn/9780385533225-S.jpg
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True)
+    app.run()
 
 

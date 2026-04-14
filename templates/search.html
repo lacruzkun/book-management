@@ -18,32 +18,64 @@
                 </div>
                 <p style="font-size: 0.9rem; color: #555; margin-top: 5px;">A lone astronaut must save the earth from disaster...</p>
             </div>
-            <form id="addForm" action={{ url_for('add_to_plan_button') }} method="POST">
+            <form class="addForm" method="POST">
                 <input type="hidden" name="book_id" value={{ result.id }}>
+                <input type="hidden" name="book_name" value={{ result.title }}>
                 <button type="submit" class="add-btn" >Add to Library</button>
             </form>
-            <script>
-            document.addEventListener("DOMContentLoaded", () {
-                const form = document.getElementById("addForm");
-                form.addEvenListener("submit", async function (e) {
-                    e.preventDefault();
-
-                    const formData = new FormData(this);
-
-                    const response = await fetch(this.action, {
-                        method: "POST",
-                        body: formData
-                    });
-
-                    if (response.ok) {
-                        alert("Added");
-                    }
-                }
-
-            });
-            </script>
         </div>
     </div>
     {% endfor %}
+
+    <div id="toast" style="
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #382110; /* Dark brown from your nav */
+      color: #f4f1ea;            /* Cream text */
+      padding: 16px 24px;
+      border-radius: 4px;        /* Slightly sharper corners for a bookish look */
+      font-family: 'Georgia', serif;
+      font-size: 0.95rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      border-left: 5px solid #764132; /* Terracotta accent 'bookmark' */
+      display: none;             /* Hidden by default */
+      z-index: 9999;
+      min-width: 250px;
+      letter-spacing: 0.5px;
+    ">
+    </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" 
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
+  crossorigin="anonymous"></script>
+<script>
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.style.display = "block";
+
+    setTimeout(() => {
+        toast.style.display = "none";
+    }, 3000); // disappears after 3 seconds
+}
+$(document).on("submit", '.addForm', function(e) {
+    e.preventDefault();
+    const form = $(this);
+    const bookId = form.find('input[name=book_id]').val()
+    const bookName = form.find('input[name=book_name]').val()
+    $.ajax({
+        type: 'POST',
+        url: '/',
+        data: {
+            book_id: bookId
+        },
+        success: function(response)
+        {
+            const message = `Book "${bookName}" added successfully`;
+            showToast(message);}
+    });
+});
+</script>
 {% endblock %}
