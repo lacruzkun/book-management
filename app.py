@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect , url_for, session
+from dotenv import load_dotenv
 import sqlite3
 import os
 
 
+load_dotenv()
 app = Flask(__name__)
 DB_NAME = "books.db"
-app.secret_key = "KPLlkjsielkfOIjlkdoeikfiw"
+app.secret_key = os.getenv("SECRET_KEY")
 
 def init_db():
     conn = sqlite3.connect(DB_NAME)
@@ -18,6 +20,24 @@ def init_db():
                    page_count INTERGER,
                    isbn TEXT,
                    cover_path TEXT)""")
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS genres (
+            id INTEGER PRIMARY KEY,
+            name TEXT UNIQUE
+        )
+        """)
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS book_genres (
+        book_id INTEGER,
+        genre_id INTEGER,
+        PRIMARY KEY (book_id, genre_id),
+        FOREIGN KEY (book_id) REFERENCES books(id),
+        FOREIGN KEY (genre_id) REFERENCES genres(id)
+    )
+    """)
+
 
     cursor.execute("""CREATE TABLE IF NOT EXISTS user_books(user_id INTERGE, 
                     book_id INTERGER, 
@@ -151,6 +171,20 @@ def search():
 
     return render_template("search.html", no_of_results=len(results), results=results, query=query)
 
+@app.route("/book/<int:book_id>")
+def book_detail(book_id):
+    conn = get_db_connection()
+    book = conn.execute("SELECT * FROM books WHERE id = ?", (book_id,)).fetchone()
+    if book == None:
+        conn.close()
+        return "Book not found", 404
+    genres = conn.execute("""SELECT genres.name 
+                          FROM genres JOIN book_genres ON genres.id = book_genres.genre_id 
+                          WHERE book_genres.book_id = ?""", (book_id, )).fetchall()
+
+    conn.close()
+    return render_template("book_detail.html", book=book, genres=genres)
+
 
 
 
@@ -158,4 +192,4 @@ def search():
 # https://covers.openlibrary.org/b/isbn/9780385533225-S.jpg
 if __name__ == "__main__":
     init_db()
-    app.run()
+    app.run(debug=True)

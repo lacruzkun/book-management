@@ -177,6 +177,150 @@ user_books = [
     (8, 4, 33.0, "reading"),
     (8, 5, 0.0, "plan"),
 ]
+
+genres = [
+    (1, "Programming"),
+    (2, "Software Engineering"),
+    (3, "Computer Science"),
+    (4, "Algorithms"),
+    (5, "Databases"),
+    (6, "Operating Systems"),
+    (7, "Systems Programming"),
+    (8, "Web Development"),
+    (9, "Version Control"),
+    (10, "Fiction"),
+    (11, "Classic"),
+    (12, "Dystopian"),
+    (13, "Romance"),
+    (14, "Horror"),
+    (15, "Adventure"),
+    (16, "Fantasy"),
+    (17, "Science Fiction"),
+    (18, "Thriller"),
+    (19, "Mystery"),
+    (20, "Historical Fiction"),
+    (21, "Literary Fiction"),
+    (22, "Coming-of-Age"),
+    (23, "Young Adult"),
+    (24, "African Literature"),
+    (25, "Self-Help"),
+    (26, "Productivity"),
+    (27, "Psychology"),
+    (28, "Finance"),
+    (29, "Stoicism"),
+    (30, "Personal Development"),
+    (31, "Leadership"),
+    (32, "Philosophy"),
+    (33, "Nonfiction"),
+    (34, "Memoir"),
+]
+
+genre_id = {name: gid for gid, name in genres}
+
+book_genres = []
+
+def add_genres(book_id, *genre_names):
+    for genre_name in genre_names:
+        book_genres.append((book_id, genre_id[genre_name]))
+
+add_genres(1, "Programming", "Software Engineering")
+add_genres(2, "Programming", "Software Engineering")
+add_genres(3, "Programming", "Software Engineering")
+add_genres(4, "Programming")
+add_genres(5, "Programming")
+add_genres(6, "Programming")
+add_genres(7, "Programming", "Software Engineering")
+add_genres(8, "Programming", "Computer Science")
+add_genres(9, "Algorithms", "Computer Science")
+add_genres(10, "Operating Systems", "Computer Science")
+add_genres(11, "Databases", "Computer Science")
+add_genres(12, "Databases")
+add_genres(13, "Programming", "Systems Programming")
+add_genres(14, "Programming", "Systems Programming")
+add_genres(15, "Programming", "Systems Programming")
+add_genres(16, "Programming", "Systems Programming")
+add_genres(17, "Programming", "Systems Programming")
+add_genres(18, "Programming", "Web Development")
+add_genres(19, "Version Control", "Software Engineering")
+add_genres(20, "Programming", "Software Engineering")
+
+add_genres(21, "Fiction", "Literary Fiction")
+add_genres(22, "Fiction", "Dystopian", "Classic")
+add_genres(23, "Fiction", "Dystopian", "Classic")
+add_genres(24, "Fiction", "Classic", "Literary Fiction")
+add_genres(25, "Fiction", "Classic", "Literary Fiction")
+add_genres(26, "Fiction", "Classic", "Romance")
+add_genres(27, "Fiction", "Classic", "Horror")
+add_genres(28, "Fiction", "Classic", "Adventure")
+add_genres(29, "Fiction", "Classic", "Romance")
+add_genres(30, "Fiction", "Classic", "Romance")
+add_genres(31, "Fiction", "Classic", "Coming-of-Age")
+add_genres(32, "Fiction", "Dystopian", "Classic")
+add_genres(33, "Fiction", "Classic", "Coming-of-Age")
+add_genres(34, "Fiction", "Classic")
+add_genres(35, "Fiction", "Historical Fiction", "Literary Fiction")
+add_genres(36, "Fiction", "Historical Fiction", "Literary Fiction")
+add_genres(37, "Fiction", "Historical Fiction", "Literary Fiction")
+add_genres(38, "Fiction", "Young Adult", "Romance", "Coming-of-Age")
+add_genres(39, "Fiction", "Science Fiction", "Adventure")
+add_genres(40, "Fiction", "Fantasy", "Adventure")
+for book_id in range(41, 48):
+    add_genres(book_id, "Fiction", "Fantasy", "Adventure", "Young Adult")
+add_genres(48, "Fiction", "Mystery", "Thriller")
+add_genres(49, "Fiction", "Mystery", "Thriller")
+add_genres(50, "Fiction", "Thriller", "Mystery")
+add_genres(51, "Fiction", "Thriller", "Mystery")
+add_genres(52, "Fiction", "Thriller", "Mystery")
+add_genres(53, "Fiction", "Thriller", "Mystery")
+add_genres(54, "Fiction", "Romance", "Young Adult")
+add_genres(55, "Fiction", "Literary Fiction")
+add_genres(56, "Fiction", "Literary Fiction", "Romance")
+add_genres(57, "Fiction", "Mystery", "Literary Fiction")
+add_genres(58, "Fiction", "Science Fiction", "Literary Fiction")
+add_genres(59, "Fiction", "Dystopian", "Young Adult")
+add_genres(60, "Fiction", "Fantasy", "Adventure")
+add_genres(61, "Fiction", "Fantasy", "Adventure")
+add_genres(62, "Fiction", "Fantasy", "Historical Fiction")
+add_genres(63, "Fiction", "Fantasy", "Historical Fiction")
+add_genres(64, "Fiction", "Science Fiction", "Adventure")
+add_genres(65, "Fiction", "Science Fiction", "Adventure")
+add_genres(66, "Fiction", "Science Fiction", "Adventure")
+add_genres(67, "Fiction", "Science Fiction", "Young Adult")
+add_genres(68, "Fiction", "Science Fiction")
+add_genres(69, "Fiction", "Science Fiction")
+add_genres(70, "Fiction", "Dystopian", "Classic")
+add_genres(71, "Fiction", "Dystopian", "Young Adult")
+add_genres(72, "Fiction", "Dystopian", "Young Adult")
+add_genres(73, "Fiction", "Dystopian", "Young Adult")
+add_genres(74, "Fiction", "Thriller", "Mystery")
+add_genres(75, "Fiction", "Mystery", "Historical Fiction")
+add_genres(76, "Fiction", "Literary Fiction", "Historical Fiction")
+add_genres(77, "Fiction", "African Literature", "Classic")
+add_genres(78, "Fiction", "Literary Fiction", "Historical Fiction")
+add_genres(79, "Fiction", "Romance", "Historical Fiction")
+add_genres(80, "Nonfiction", "Memoir", "Personal Development")
+
+add_genres(81, "Self-Help", "Productivity", "Personal Development")
+add_genres(82, "Self-Help", "Productivity", "Personal Development")
+add_genres(83, "Psychology", "Self-Help", "Nonfiction")
+add_genres(84, "Self-Help", "Leadership", "Personal Development")
+add_genres(85, "Self-Help", "Leadership", "Personal Development")
+add_genres(86, "Self-Help", "Personal Development")
+add_genres(87, "Finance", "Self-Help", "Personal Development")
+add_genres(88, "Finance", "Psychology", "Self-Help")
+add_genres(89, "Philosophy", "Self-Help", "Nonfiction")
+add_genres(90, "Philosophy", "Stoicism", "Self-Help")
+add_genres(91, "Finance", "Self-Help", "Personal Development")
+add_genres(92, "Philosophy", "Self-Help", "Personal Development")
+add_genres(93, "Philosophy", "Self-Help", "Personal Development")
+add_genres(94, "Self-Help", "Leadership", "Personal Development")
+add_genres(95, "Self-Help", "Personal Development")
+add_genres(96, "Leadership", "Self-Help", "Personal Development")
+add_genres(97, "Psychology", "Self-Help", "Personal Development")
+add_genres(98, "Philosophy", "Stoicism", "Self-Help")
+add_genres(99, "Psychology", "Self-Help", "Personal Development")
+add_genres(100, "Self-Help", "Philosophy", "Personal Development")
+
 def main():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
@@ -205,6 +349,22 @@ def main():
                     pic_path TEXT,
                     password TEXT)""")
 
+    #  New genre tables
+    cursor.execute("""CREATE TABLE IF NOT EXISTS genres (
+                    id INTEGER PRIMARY KEY,
+                    name TEXT UNIQUE
+    )""")
+
+    cursor.execute("""CREATE TABLE IF NOT EXISTS book_genres (
+                    book_id INTEGER,
+                    genre_id INTEGER,
+                    PRIMARY KEY (book_id, genre_id),
+                    FOREIGN KEY (book_id) REFERENCES books(id),
+                    FOREIGN KEY (genre_id) REFERENCES genres(id)
+    )""")
+
+
+
     cursor.executemany("""
         INSERT OR REPLACE INTO books
         (id, title, author, file_path, page_count,isbn, cover_path)
@@ -222,6 +382,18 @@ def main():
         (user_id, book_id, progress, status)
         VALUES (?, ?, ?, ?)
     """, user_books)
+
+    cursor.executemany("""
+        INSERT OR REPLACE INTO genres
+        (id, name)
+        VALUES (?, ?)
+    """, genres)
+
+    cursor.executemany("""
+        INSERT OR REPLACE INTO book_genres
+        (book_id, genre_id)
+        VALUES (?, ?)
+    """, book_genres)
 
     conn.commit()
     conn.close()

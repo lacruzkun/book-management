@@ -1,0 +1,114 @@
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Section Headers */
+.library-section-title {
+    font-family: "Georgia", serif;
+    color: #382110;
+    font-size: 1.8rem;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #dcd9d0;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.library-section-title:first-of-type {
+    margin-top: 0;
+}
+
+/* Book List Containers */
+.book-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Horizontal Book Card */
+.book-item {
+    background: white;
+    border: 1px solid #dcd9d0;
+    border-radius: 8px;
+    display: flex;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.book-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.current-cover {
+    width: 120px;
+    height: 180px;
+    object-fit: cover;
+    background-color: #eee;
+    border-right: 1px solid #f4f1ea;
+}
+
+.current-info {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.current-info h4 {
+    font-family: "Georgia", serif;
+    font-size: 1.2rem;
+    color: #382110;
+    margin: 0 0 5px 0;
+}
+
+.author-text {
+    font-size: 0.95rem;
+    color: #764132;
+    margin: 0;
+    font-style: italic;
+}
+
+.progress-text {
+    margin: 15px 0 5px 0;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Progress Bar */
+.progress-bar {
+    height: 8px;
+    background: #e9e5d8;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 300px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #764132; /* Terracotta */
+    width: 65%; /* This can be dynamic later */
+}
+
+/* Empty State Styling */
+.empty-msg {
+    background: rgba(220, 217, 208, 0.3);
+    border: 1px dashed #dcd9d0;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+    color: #888;
+    font-style: italic;
+}
+
+@media (max-width: 600px) {
+    .book-item { flex-direction: row; }
+    .current-cover { width: 80px; height: 120px; }
+}

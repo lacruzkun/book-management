@@ -1,53 +1,177 @@
 {% extends "base.html" %}
-{% block title %}Explore Books | The Book Nook{% endblock %}
+{% block link %}<link rel="stylesheet" href="../static/books.css">{% endblock %}
+{% block title %}My Library | The Book Nook{% endblock %}
+
 {% block content %}
-<h1> Planning To Read </h1>
-<div class="profile-content">
-    <div class="main-column">
-        {% for p in plan %}
-        <div class="currently-reading">
-            <img src={{ p.cover_path }}  alt="Book Cover" class="current-cover">
-            <div class="current-info">
-                <h4 style="margin:0 0 5px 0;">{{ p.title }}</h4>
-                <p style="margin:0; font-size: 0.9rem; color: #666;">by {{ p.author }}</p>
-                <p style="margin:15px 0 5px 0; font-size: 0.8rem;">Progress: N/A </p>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-<h1> Currently Reading </h1>
-<div class="profile-content">
-    <div class="main-column">
+<style>
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    /* Section Headers */
+    .library-section-title {
+        font-family: "Georgia", serif;
+        color: #382110;
+        font-size: 1.8rem;
+        margin-top: 50px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #dcd9d0;
+        padding-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .library-section-title:first-of-type {
+        margin-top: 0;
+    }
+
+    /* Book List Containers */
+    .book-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Horizontal Book Card */
+    .book-item {
+        background: white;
+        border: 1px solid #dcd9d0;
+        border-radius: 8px;
+        display: flex;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .book-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .current-cover {
+        width: 120px;
+        height: 180px;
+        object-fit: cover;
+        background-color: #eee;
+        border-right: 1px solid #f4f1ea;
+    }
+
+    .current-info {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .current-info h4 {
+        font-family: "Georgia", serif;
+        font-size: 1.2rem;
+        color: #382110;
+        margin: 0 0 5px 0;
+    }
+
+    .author-text {
+        font-size: 0.95rem;
+        color: #764132;
+        margin: 0;
+        font-style: italic;
+    }
+
+    .progress-text {
+        margin: 15px 0 5px 0;
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+        height: 8px;
+        background: #e9e5d8;
+        border-radius: 10px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: #764132; /* Terracotta */
+        width: 65%; /* This can be dynamic later */
+    }
+
+    /* Empty State Styling */
+    .empty-msg {
+        background: rgba(220, 217, 208, 0.3);
+        border: 1px dashed #dcd9d0;
+        padding: 30px;
+        text-align: center;
+        border-radius: 8px;
+        color: #888;
+        font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+        .book-item { flex-direction: row; }
+        .current-cover { width: 80px; height: 120px; }
+    }
+</style>
+
+<div class="container">
+
+    <h2 class="library-section-title">📖 Currently Reading</h2>
+    <div class="book-list">
         {% for curr in current %}
-        <div class="currently-reading">
-            <img src={{ curr.cover_path }}  alt="Book Cover" class="current-cover">
+        <div class="book-item">
+            <img src="{{ curr.cover_path }}" alt="Book Cover" class="current-cover">
             <div class="current-info">
-                <h4 style="margin:0 0 5px 0;">{{ curr.title }}</h4>
-                <p style="margin:0; font-size: 0.9rem; color: #666;">by {{ curr.author }}</p>
-                <p style="margin:15px 0 5px 0; font-size: 0.8rem;">Progress: 65% (310 / 476 pages)</p>
+                <h4>{{ curr.title }}</h4>
+                <p class="author-text">by {{ curr.author }}</p>
+                <p class="progress-text">Progress: 65% (310 / 476 pages)</p>
                 <div class="progress-bar">
                     <div class="progress-fill"></div>
                 </div>
             </div>
         </div>
+        {% else %}
+        <div class="empty-msg">You aren't reading anything at the moment. Time to start a new adventure?</div>
         {% endfor %}
     </div>
-</div>
-<h1> Completed Reading</h1>
-<div class="profile-content">
-    <div class="main-column">
-        {% for r in read %}
-        <div class="currently-reading">
-            <img src={{ r.cover_path }}  alt="Book Cover" class="current-cover">
+
+    <h2 class="library-section-title">🔖 Planning To Read</h2>
+    <div class="book-list">
+        {% for p in plan %}
+        <div class="book-item">
+            <img src="{{ p.cover_path }}" alt="Book Cover" class="current-cover">
             <div class="current-info">
-                <h4 style="margin:0 0 5px 0;">{{ r.title }}</h4>
-                <p style="margin:0; font-size: 0.9rem; color: #666;">by {{ r.author }}</p>
-                <p style="margin:15px 0 5px 0; font-size: 0.8rem;">Progress: Completed </p>
+                <h4>{{ p.title }}</h4>
+                <p class="author-text">by {{ p.author }}</p>
+                <p class="progress-text">Added to wishlist</p>
             </div>
         </div>
+        {% else %}
+        <div class="empty-msg">Your "To-Read" shelf is empty. Visit the Explore page to find your next favorite!</div>
         {% endfor %}
     </div>
-</div>
 
+    <h2 class="library-section-title">✅ Completed Reading</h2>
+    <div class="book-list">
+        {% for r in read %}
+        <div class="book-item">
+            <img src="{{ r.cover_path }}" alt="Book Cover" class="current-cover">
+            <div class="current-info">
+                <h4>{{ r.title }}</h4>
+                <p class="author-text">by {{ r.author }}</p>
+                <p class="progress-text" style="color: #2d5a27;">Finished</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-msg">No books completed yet. Keep turning those pages!</div>
+        {% endfor %}
+    </div>
+
+</div>
 {% endblock %}

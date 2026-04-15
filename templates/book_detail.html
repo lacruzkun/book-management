@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block link %}<link rel="stylesheet" href="../static/book_detail.css">{% endblock %}
+{% block title %}{{ book.title }} | The Book Nook{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="book-cover-wrapper">
+        <img src="{{ book.cover_path }}" alt="{{ book.title }} Cover">
+    </div>
+
+    <div class="book-details">
+        <a href="#" class="back-link">← Return to Explore</a>
+        
+        <h1>{{ book.title }}</h1>
+        <p class="author-name">by {{ book.author }}</p>
+
+        <div class="meta-info">
+            <div class="meta-item">
+                <strong>Pages</strong>
+                {{ book.page_count }} pages
+            </div>
+            <div class="meta-item">
+                <strong>ISBN</strong>
+                {{ book.isbn }}
+            </div>
+        </div>
+
+        <div class="genres-section">
+            <h3>Genres</h3>
+            <ul class="genre-list">
+                {% for genre in genres %}
+                    <li>{{ genre.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="button-group">
+            <button class="btn btn-read">
+                <span class="icon">📖</span> Start Reading
+            </button>
+            <button class="btn btn-shelf" onclick="showToast()">
+                <span class="icon">🔖</span> Add to Shelf
+            </button>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
