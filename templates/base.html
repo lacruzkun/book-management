@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block link %}{% endblock %}<link rel="stylesheet" href="../static/home.css">
+    {% block link %}{% endblock %}
     <title>{% block title %}Book Manager {% endblock %}</title>
 </head>
 <body>
@@ -14,7 +14,6 @@
         <div class="search-container">
             <form action="{{ url_for('search') }}" method="GET">
                 <input type="text" placeholder="Search by title, author, or ISBN..." name="q" value= {{ query }}>
-                <button type="submit">🔍</button>
             </form>
         </div>
 

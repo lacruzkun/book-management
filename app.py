@@ -1,4 +1,7 @@
-from flask import Flask, render_template, request, redirect , url_for, session
+from flask import Flask, render_template, request, redirect , url_for, session, send_from_directory
+from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 import sqlite3
 import os
@@ -7,6 +10,9 @@ import os
 load_dotenv()
 app = Flask(__name__)
 DB_NAME = "books.db"
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.secret_key = os.getenv("SECRET_KEY")
 
 def init_db():
@@ -48,7 +54,7 @@ def init_db():
 
     cursor.execute("""CREATE TABLE IF NOT EXISTS users(id INTERGER UNIQUE, 
                     username TEXT, 
-                    name TEXT,
+                    email TEXT, 
                     bio TEXT,
                     pic_path TEXT,
                     password TEXT)""")
@@ -69,7 +75,7 @@ def home():
     if request.method == "POST":
         book_id = request.form.get("book_id")
         conn = get_db_connection()
-        conn.execute("INSERT INTO user_books(user_id, book_id, progress, status) values(?, ?, ?, ?)", (session["user"][0], book_id, "N/A", "plan"))
+        conn.execute("INSERT INTO user_books(user_id, book_id, progress, status) values(?, ?, ?, ?)", (session["user"]["id"], book_id, "N/A", "plan"))
         conn.commit()
         conn.close()
 
@@ -77,40 +83,56 @@ def home():
     books = conn.execute("SELECT * FROM books").fetchall()
     conn.close()
 
-    return render_template("home.html", user=session["user"][1], books=books)
+    return render_template("home.html", user=session["user"], books=books)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form.get("username")
+        email = request.form.get("email")
         password = request.form.get("password")
-
+        hashed = generate_password_hash(password)
         conn = get_db_connection()
-        usr = conn.execute("SELECT id, username, name, bio, pic_path  FROM users WHERE username = ? AND password = ?", (username, password)).fetchone()
+        usr = conn.execute("SELECT id, password, username, email, bio, pic_path  FROM users WHERE email = ? ", (email, )).fetchone()
+
+        if not check_password_hash(usr["password"], password):
+            print("wrong password")
+            return render_template("login.html")
+
         conn.close()
+        print("logging in with ", email, hash(password))
         if usr == None:
             return render_template("login.html")
+
+        user = {
+                "id": usr["id"],
+                "username": usr["username"],
+                "bio": usr["bio"],
+                "pic_path": usr["pic_path"],
+        }
             
-        session["user"] = [usr['id'], usr['username'], usr['name'], usr['bio'], usr['pic_path']]
+        session["user"] = user
         return redirect(url_for("home"))
     return render_template("login.html")
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
+        email = request.form.get("email")
         username = request.form.get("username")
         password = request.form.get("password")
         repassword = request.form.get("repassword")
 
         if password != repassword:
-            return redirect(url_for("signup"))
+            return render_template("signup.html", mismatch=True)
+        hashed = generate_password_hash(password)
 
         conn = get_db_connection()
-        usr = conn.execute("SELECT username, name, bio, pic_path  FROM users WHERE username = ? AND password = ?", (username, password)).fetchone()
-        conn.execute("INSERT INTO users(id, username, password, name, bio, pic_path) values(?, ?, ?, ?, ?, ?)", (hash(username+password), username, password, "", "", ""))
+        conn.execute("""INSERT INTO 
+                     users(id, username, password, email, bio, pic_path) 
+                     values(?, ?, ?, ?, ?, ?)""", 
+                     (hash(username+password), username, hashed,  email, "", ""))
         conn.commit()
         conn.close()
-        session["user"] = [hash(username+password), username, "",  "", ""]
         return redirect(url_for("login"))
     return render_template("signup.html")
 
@@ -124,17 +146,17 @@ def my_books():
     if "user" not in session:
         return redirect(url_for("login"))
     conn = get_db_connection()
-    profile = conn.execute("SELECT username, name, pic_path, bio FROM users WHERE id = ?", (session["user"][0],)).fetchone()
-    curr_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "reading")).fetchall()
+    profile = conn.execute("SELECT username,  pic_path, bio FROM users WHERE id = ?", (session["user"]["id"],)).fetchone()
+    curr_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"]["id"], "reading")).fetchall()
     c_b = []
     r_b = []
     p_b = []
     for b in curr_books:
         c_b.append(conn.execute("SELECT * FROM books WHERE id = ?", (b["book_id"], )).fetchone())
-    read_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "read")).fetchall()
+    read_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"]["id"], "read")).fetchall()
     for b in read_books:
         r_b.append(conn.execute("SELECT * FROM books WHERE id = ?", (b["book_id"], )).fetchone())
-    plan_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "plan")).fetchall()
+    plan_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"]["id"], "plan")).fetchall()
     for b in plan_books:
         p_b.append(conn.execute("SELECT * FROM books WHERE id = ?", (b["book_id"], )).fetchone())
     conn.close()
@@ -145,15 +167,16 @@ def profile():
     if "user" not in session:
         return redirect(url_for("login"))
     conn = get_db_connection()
-    profile = conn.execute("SELECT username, name, pic_path, bio FROM users WHERE id = ?", (session["user"][0],)).fetchone()
-    curr_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "reading")).fetchall()
+    profile = conn.execute("SELECT username, pic_path, bio FROM users WHERE id = ?", (session["user"]["id"],)).fetchone()
+    curr_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"]["id"], "reading")).fetchall()
     c_b = []
     for b in curr_books:
         c_b.append(conn.execute("SELECT * FROM books WHERE id = ?", (b["book_id"], )).fetchone())
 
-    read_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "read")).fetchall()
-    plan_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"][0], "plan")).fetchall()
+    read_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"]["id"], "read")).fetchall()
+    plan_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"]["id"], "plan")).fetchall()
     conn.close()
+    print(session)
     return render_template("profile.html", profile=profile, no_of_currently_reading=len(c_b), no_of_read=len(read_books), no_of_plan=len(plan_books), current=c_b)
 
 @app.route("/search")
@@ -184,6 +207,35 @@ def book_detail(book_id):
 
     conn.close()
     return render_template("book_detail.html", book=book, genres=genres)
+
+@app.route("/add_profile_pic", methods=["POST", "GET"])
+def add_profile_pic():
+    file = request.files["file"]
+    if file.filename == "":
+        return "No file selected"
+    filename = secure_filename(file.filename)
+    path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    file.save(path)
+    conn = get_db_connection()
+    conn.execute("""UPDATE users SET pic_path = ? WHERE id = ?""",
+                   (path, session["user"]["id"]))
+    user = {
+            "id": session["user"]["id"],
+            "username": session["user"]["username"],
+            "bio": session["user"]["bio"],
+            "pic_path": path
+    }
+    session["user"] = user
+    conn.commit()
+    conn.close()
+    return "OK"
+
+@app.route("/uploads/<filename>")
+def uploaded_file(filename):
+    return send_from_directory(
+            app.config["UPLOAD_FOLDER"],
+            filename
+    )
 
 
 

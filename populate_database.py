@@ -110,10 +110,6 @@ books = [
     (99, "Drive", "Daniel H. Pink", None, 272, "9781594484803", "https://covers.openlibrary.org/b/isbn/9781594484803-M.jpg"),
     (100, "Ikigai", "Héctor García", None, 208, "9780143130727", "https://covers.openlibrary.org/b/isbn/9780143130727-M.jpg"),
 ]
-users = [
-    (1, "cruzabraham", "La Cruz", "Book lover and developer", "/pics/cruz.jpg", "asdf"),
-    (2, "jane_doe", "Jane Doe", "Reads mostly fiction", "/pics/jane.jpg", "asdf"),
-]
 
 user_books = [
     (1, 1, 25.0, "reading"),
@@ -344,7 +340,7 @@ def main():
 
     cursor.execute("""CREATE TABLE IF NOT EXISTS users(id INTERGER UNIQUE, 
                     username TEXT, 
-                    name TEXT,
+                    email TEXT, 
                     bio TEXT,
                     pic_path TEXT,
                     password TEXT)""")
@@ -371,11 +367,6 @@ def main():
         VALUES (?, ?, ?, ?, ?,?, ?)
     """, books)
 
-    cursor.executemany("""
-        INSERT OR REPLACE INTO users
-        (id, username, name, bio, pic_path, password)
-        VALUES (?, ?, ?, ?, ?, ?)
-    """, users)
 
     cursor.executemany("""
         INSERT INTO user_books

@@ -75,3 +75,13 @@ button:hover {
 .footer-links a:hover {
     text-decoration: underline;
 }
+
+.toast-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.toast-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
