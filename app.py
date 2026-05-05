@@ -176,7 +176,6 @@ def profile():
     read_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"]["id"], "read")).fetchall()
     plan_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"]["id"], "plan")).fetchall()
     conn.close()
-    print(session)
     return render_template("profile.html", profile=profile, no_of_currently_reading=len(c_b), no_of_read=len(read_books), no_of_plan=len(plan_books), current=c_b)
 
 @app.route("/search")
@@ -213,24 +212,27 @@ def add_profile_pic():
     file = request.files["file"]
     if file.filename == "":
         return "No file selected"
-    filename = secure_filename(file.filename)
-    path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-    file.save(path)
+
+    filename, ext = (hash("".join(file.filename.split(".")[:-1])), file.filename.split(".")[-1])
+
+    filename = secure_filename(str(filename)) + "." + ext
+    file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
     conn = get_db_connection()
     conn.execute("""UPDATE users SET pic_path = ? WHERE id = ?""",
-                   (path, session["user"]["id"]))
+                   (filename, session["user"]["id"]))
     user = {
             "id": session["user"]["id"],
             "username": session["user"]["username"],
             "bio": session["user"]["bio"],
-            "pic_path": path
+            "pic_path": filename
     }
+
     session["user"] = user
     conn.commit()
     conn.close()
     return "OK"
 
-@app.route("/uploads/<filename>")
+@app.route("/<filename>")
 def uploaded_file(filename):
     return send_from_directory(
             app.config["UPLOAD_FOLDER"],
