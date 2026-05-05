@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 import sqlite3
 import os
 
-
 load_dotenv()
 app = Flask(__name__)
 DB_NAME = "books.db"
@@ -87,6 +86,7 @@ def home():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    init_db()
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
@@ -245,5 +245,4 @@ def uploaded_file(filename):
 
 # https://covers.openlibrary.org/b/isbn/9780385533225-S.jpg
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
