@@ -24,7 +24,8 @@ def init_db():
                    file_path TEXT, 
                    page_count INTERGER,
                    isbn TEXT,
-                   cover_path TEXT)""")
+                   cover_path TEXT,
+                   uploaded_by TEXT)""")
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS genres (
@@ -44,9 +45,10 @@ def init_db():
     """)
 
 
-    cursor.execute("""CREATE TABLE IF NOT EXISTS user_books(user_id INTERGE, 
+    cursor.execute("""CREATE TABLE IF NOT EXISTS user_books(user_id INTERGER, 
                     book_id INTERGER, 
                     progress DECIMAL, 
+                    rating DECIMAL, 
                     status TEXT,
                     FOREIGN KEY (user_id) REFERENCES users(id)
                     FOREIGN KEY (book_id) REFERENCES books(id))""")
@@ -56,7 +58,8 @@ def init_db():
                     email TEXT, 
                     bio TEXT,
                     pic_path TEXT,
-                    password TEXT)""")
+                    password TEXT
+                    )""")
     conn.commit()
     conn.close()
 
@@ -170,12 +173,14 @@ def profile():
     profile = conn.execute("SELECT username, pic_path, bio FROM users WHERE id = ?", (session["user"]["id"],)).fetchone()
     curr_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"]["id"], "reading")).fetchall()
     c_b = []
+
     for b in curr_books:
         c_b.append(conn.execute("SELECT * FROM books WHERE id = ?", (b["book_id"], )).fetchone())
 
     read_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"]["id"], "read")).fetchall()
     plan_books = conn.execute("SELECT * FROM user_books WHERE user_id = ? AND status = ?", (session["user"]["id"], "plan")).fetchall()
     conn.close()
+
     return render_template("profile.html", profile=profile, no_of_currently_reading=len(c_b), no_of_read=len(read_books), no_of_plan=len(plan_books), current=c_b)
 
 @app.route("/search")
@@ -239,10 +244,15 @@ def uploaded_file(filename):
             filename
     )
 
+@app.route("/add")
+def add_book():
+    return render_template("add.html")
+
 
 
 
 
 # https://covers.openlibrary.org/b/isbn/9780385533225-S.jpg
 if __name__ == "__main__":
+    init_db()
     app.run(debug=True)

@@ -1,0 +1,112 @@
+
+/* Center the form and account for the absolute header */
+.upload-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding-top: 100px; 
+}
+
+/* Glassmorphism container matching the search bar style */
+.upload-container {
+    background: rgba(10, 69, 73, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.upload-container h2 {
+    margin-bottom: 25px;
+    font-size: 2rem;
+    text-align: center;
+    color: #382110;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #382110;
+}
+
+/* Form inputs styled like the search bar */
+.form-control {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #000;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-control::placeholder {
+    color: #000;
+}
+
+/* Glowing focus state utilizing the dynamic --accent-color */
+.form-control:focus {
+    border-color: var(--accent-color);
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--accent-color), transparent 70%);
+}
+
+.file-input {
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* Custom styling for the file upload button */
+.file-input::-webkit-file-upload-button {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 15px;
+    transition: 0.3s;
+}
+
+.file-input::-webkit-file-upload-button:hover {
+    background: var(--accent-color);
+    color: #fff;
+}
+
+textarea.form-control {
+    resize: vertical; /* Allows vertical scaling only */
+}
+
+/* Enhancing the primary button for the form submission */
+.submit-btn {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: var(--accent-color);
+    color: #fff;
+    box-shadow: 0 0 15px color-mix(in srgb, var(--accent-color), transparent 50%);
+}
+
+/* Mobile Adjustment for the form */
+@media (max-width: 768px) {
+    .upload-container {
+        padding: 30px 20px;
+        margin: 0 5%;
+    }
+}

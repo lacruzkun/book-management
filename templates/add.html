@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='add.css') }}">{% endblock %}
+
+{% block title %}Add Book - {% endblock %}
+
+{% block content %}
+<main class="upload-page">
+    <section class="upload-container">
+        <h2>Add a New Book</h2>
+        <form action="/upload" method="POST" enctype="multipart/form-data" class="upload-form">
+            <div class="form-group">
+                <label for="title">Book Title</label>
+                <input type="text" id="title" name="title" class="form-control" placeholder="Enter book title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" id="author" name="author" class="form-control" placeholder="Enter author name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="year">Release Year</label>
+                <input type="number" id="year" name="year" class="form-control" placeholder="e.g. 2026" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="cover">Cover Image</label>
+                <input type="file" id="cover" name="cover" class="form-control file-input" accept="image/*" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Synopsis</label>
+                <textarea id="description" name="description" class="form-control" rows="5" placeholder="Enter a brief description..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn-primary submit-btn">Upload Book</button>
+        </form>
+    </section>
+</main>
+{% endblock %}
